@@ -1,2 +1,0 @@
-# SQLCHITCHAT
-Sqlchitchat website code
