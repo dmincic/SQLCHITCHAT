@@ -1,9 +1,5 @@
 ﻿using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
 using System.Threading;
-//using System.Threading.Tasks;
 
 namespace mutexExample
 {
@@ -24,12 +20,11 @@ namespace mutexExample
                 Threads[i].Name = "ChildThread " + i;
 
             }
-            //start all 3 threads;
+            //start all threads
             foreach (Thread t in Threads)
             {
                 t.Start();
             }
-
         }
         class ThreadSafeDivide
         {
@@ -57,12 +52,12 @@ namespace mutexExample
                   
                 }
                 //m.ReleaseMutex();
+
                 Console.WriteLine(Thread.CurrentThread.Name + " has finished processing");
 
                 Console.WriteLine("Press any key to exit");
                 Console.ReadLine();//wait for user to press ENTER
-            }
-            
+            }           
         }       
     }
 }
