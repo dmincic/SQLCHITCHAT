@@ -56,7 +56,7 @@ RETURN
 		  
 		  --,execr.transaction_isolation_level
 		  ,IsolationLevel = CASE execr.transaction_isolation_level
-								WHEN 0 THEN 'Unspecified'
+							    WHEN 0 THEN 'Unspecified'
 								WHEN 1 THEN 'ReadUncomitted'
 								WHEN 2 THEN 'ReadCommitted'
 								WHEN 3 THEN 'Repeatable'
