@@ -8,8 +8,8 @@
                        Id INT IDENTITY(1,1) 
                           CONSTRAINT PK_Id 
                               PRIMARY KEY CLUSTERED
-                      ,ShipperId INT 
-                      ,IdentifierValue INTEGER
+                      ,ShipperId INT NOT NULL
+                      ,IdentifierValue INTEGER NOT NULL 
                           CONSTRAINT UC_ShippierId_IdentifierValue 
                               UNIQUE(ShipperId,IdentifierValue)
                       ,[_SpId] INT --used to identify which session inserted record

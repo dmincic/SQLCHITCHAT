@@ -35,60 +35,54 @@ RETURN
                 ,Spid       = SUBSTRING(@spids, l.N1, l.L1)
         FROM cteLen l 
     )
+    SELECT   lck.request_session_id
+            ,ObjectName = CASE
+                        WHEN lck.resource_type = 'OBJECT'
+                            THEN OBJECT_NAME(lck.resource_associated_entity_id)
+                        ELSE OBJECT_NAME(p.[object_id])
+                    END
+            ,IndexName = i.[name]
+            ,IndexType = i.[type_desc]
+            ,lck.resource_type
+            ,lck.resource_description
 
-    SELECT CurrentDateTime = SYSDATETIME()
-          ,lck.resource_type
-          --,DB_NAME(lck.resource_database_id) AS DBName
-          --,ResoruceName = o.name 
-          ,lck.resource_description        
-           ---hardcoded values for a specific table
-          ,LockedResourceValues.HashKeyFrom
-          ,LockedResourceValues.Id    
-          ,LockedResourceValues.ShipperId
-          ,LockedResourceValues.IdentifierValue
-          -----------------------------------
-          ,lck.request_session_id
-          ,lck.request_mode
-          ,lck.request_type
-          ,lck.request_status        
-          ,execr.blocking_session_id
-          ,lck.request_owner_type
-          
-          --,execr.transaction_isolation_level
-          ,IsolationLevel = CASE execr.transaction_isolation_level
-                                WHEN 0 THEN 'Unspecified'
-                                WHEN 1 THEN 'ReadUncomitted'
-                                WHEN 2 THEN 'ReadCommitted'
-                                WHEN 3 THEN 'Repeatable'
-                                WHEN 4 THEN 'Serializable'
-                                WHEN 5 THEN 'Snapshot'
-                                ELSE 'Unknown'
-                            END 
-          ,tat.transaction_begin_time       
-    FROM sys.dm_tran_locks lck (NOLOCK)
-      INNER JOIN sys.dm_tran_session_transactions ts (NOLOCK)
-        ON lck.request_session_id = ts.session_id    
-      INNER JOIN SpidList s  --- requested spids
-        ON s.Spid  = lck.request_session_id
-      LEFT OUTER JOIN sys.dm_tran_active_transactions tat (NOLOCK)
-        ON ts.transaction_id = tat.transaction_id
-      LEFT OUTER JOIN sys.dm_exec_connections con (NOLOCK)
-        ON ts.session_id = con.session_id
-      LEFT OUTER JOIN sys.partitions pt (NOLOCK)
-        ON lck.resource_associated_entity_id = pt.[partition_id]
-      LEFT OUTER JOIN sys.objects o  (NOLOCK)
-        ON pt.object_id = o.object_id
-      LEFT OUTER JOIN sys.dm_exec_requests execr (NOLOCK)
-        ON con.session_id = execr.session_id
-     OUTER  APPLY (SELECT *,HashKeyFrom = 'Table'
-                   FROM dbo.ShipperIdentifier (NOLOCK)--hardcoded
-                   WHERE %%lockres%% = lck.resource_description
-                   UNION ALL
-                   SELECT *, Key_from_obj = 'Index'
-                   FROM dbo.ShipperIdentifier WITH (INDEX =UC_ShippierId_IdentifierValue, NOLOCK) ----hardcoded
-                   WHERE %%lockres%% = lck.resource_description
-                  )  LockedResourceValues
-    WHERE lck.resource_database_id= DB_ID()
-        AND o.[name] = N'ShipperIdentifier'; --hardcoded
+             ---hardcoded
+            ,[%%Id%%]        = unHashLock.Id
+            ,[%%ShipperId%%] = unHashLock.ShipperId
+            ,[%%IdentifierValue%%] = unHashLock.IdentifierValue
+            ,[%%File:Page:Slot%%] =unHashLock.FilePageSlot
+             ----
+            ,lck.request_mode
+            ,lck.request_type
+            ,lck.request_status
+            ,execr.blocking_session_id   
+            ,lck.request_owner_type 
+
+            ,RequestStartTime = execr.start_time
+            ,fnExecTime = SYSDATETIME()
+            ,execr.total_elapsed_time
+    FROM sys.dm_tran_locks lck WITH (NOLOCK)
+        INNER JOIN SpidList s  --- requested spids
+            ON s.Spid  = lck.request_session_id
+        LEFT JOIN sys.partitions p WITH (NOLOCK)
+            ON p.hobt_id = lck.resource_associated_entity_id
+        LEFT JOIN sys.indexes i WITH (NOLOCK)
+            ON i.OBJECT_ID = p.OBJECT_ID AND i.index_id = p.index_id
+        LEFT OUTER JOIN sys.dm_exec_requests execr WITH (NOLOCK)
+            ON lck.request_session_id = execr.session_id
+       --hardcoded
+    OUTER APPLY(
+                SELECT *,FilePageSlot = sys.fn_PhysLocFormatter(sh.%%physloc%%) 
+                FROM dbo.ShipperIdentifier sh WITH (NOLOCK)
+                WHERE %%lockres%% = lck.resource_description
+            UNION ALL
+                SELECT *,FilePageSlot = sys.fn_PhysLocFormatter(sh.%%physloc%%) 
+                FROM dbo.ShipperIdentifier sh WITH (INDEX =UC_ShippierId_IdentifierValue,NOLOCK) 
+                WHERE %%lockres%% = lck.resource_description
+                ) unHashLock
+   -----
+    WHERE resource_associated_entity_id > 0
+        AND resource_database_id = DB_ID()
+        AND OBJECT_NAME(p.[object_id]) = N'ShipperIdentifier'
 GO
 
