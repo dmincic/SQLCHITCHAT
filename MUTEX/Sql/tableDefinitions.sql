@@ -32,7 +32,7 @@
     INSERT INTO dbo.ShipperIdentifier(ShipperId,IdentifierValue,_SpId)
     SELECT TOP(10000)
            ShipperId = 50009
-          ,IdentifierValue = CAST((r*2)+1 AS VARCHAR(250)) 
+          ,IdentifierValue = (r*2)+1 
           ,InitialInsert = 0 --initial insert 
     FROM Id
     GO
