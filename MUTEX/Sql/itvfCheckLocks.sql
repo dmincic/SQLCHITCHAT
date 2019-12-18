@@ -62,7 +62,7 @@ RETURN
             ,fnExecTime = SYSDATETIME()
             ,execr.total_elapsed_time
     FROM sys.dm_tran_locks lck WITH (NOLOCK)
-        INNER JOIN SpidList s  --- requested spids
+        left JOIN SpidList s  --- requested spids
             ON s.Spid  = lck.request_session_id
         LEFT JOIN sys.partitions p WITH (NOLOCK)
             ON p.hobt_id = lck.resource_associated_entity_id
@@ -81,8 +81,8 @@ RETURN
                 WHERE %%lockres%% = lck.resource_description
                 ) unHashLock
    -----
-    WHERE resource_associated_entity_id > 0
-        AND resource_database_id = DB_ID()
-        AND OBJECT_NAME(p.[object_id]) = N'ShipperIdentifier'
+   WHERE  lck.resource_database_id = DB_ID()
+          AND (OBJECT_NAME(p.[object_id]) = N'ShipperIdentifier'
+                 OR lck.resource_type = 'APPLICATION')
 GO
 
