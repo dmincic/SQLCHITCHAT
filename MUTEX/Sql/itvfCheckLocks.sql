@@ -66,6 +66,7 @@ RETURN
             ON s.Spid  = lck.request_session_id
         LEFT JOIN sys.partitions p WITH (NOLOCK)
             ON p.hobt_id = lck.resource_associated_entity_id
+                 OR CAST(p.object_id AS BIGINT) = lck.resource_associated_entity_id
         LEFT JOIN sys.indexes i WITH (NOLOCK)
             ON i.OBJECT_ID = p.OBJECT_ID AND i.index_id = p.index_id
         LEFT OUTER JOIN sys.dm_exec_requests execr WITH (NOLOCK)
@@ -82,7 +83,7 @@ RETURN
                 ) unHashLock
    -----
    WHERE  lck.resource_database_id = DB_ID()
-          AND (OBJECT_NAME(p.[object_id]) = N'ShipperIdentifier'
+          AND (OBJECT_NAME(p.[object_id]) IN ( N'ShipperIdentifier',N'DummyLock')
                  OR lck.resource_type = 'APPLICATION')
 GO
 
