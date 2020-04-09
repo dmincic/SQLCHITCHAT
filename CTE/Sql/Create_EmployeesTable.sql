@@ -10,7 +10,7 @@ CREATE TABLE dbo.Employees(
         EmpId INT NOT NULL
           CONSTRAINT PK_EmpId PRIMARY KEY,
         MgrId INT NULL
-          CONSTRAINT FK_MgrId_EmpId  REFERENCES dbo.Employees(EmpId) --self reference
+          CONSTRAINT FK_MgrId_EmpId FOREIGN KEY REFERENCES dbo.Employees(EmpId) --self reference
         ,CHECK (EmpId != MgrId)
 )
 GO
