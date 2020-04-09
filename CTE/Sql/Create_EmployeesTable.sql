@@ -8,9 +8,9 @@ DROP TABLE IF EXISTS dbo.Employees;
 GO
 CREATE TABLE dbo.Employees(
         EmpId INT NOT NULL
-          PRIMARY KEY,
+          CONSTRAINT PK_EmpId PRIMARY KEY,
         MgrId INT NULL
-            REFERENCES dbo.Employees(EmpId) --self reference
+          CONSTRAINT FK_MgrId_EmpId  REFERENCES dbo.Employees(EmpId) --self reference
         ,CHECK (EmpId != MgrId)
 )
 GO
