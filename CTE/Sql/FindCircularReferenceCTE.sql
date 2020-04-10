@@ -15,7 +15,7 @@ DECLARE @EmpId INT = 3;
         SELECT e.EmpId
               ,e.MgrId
         ,recLvl = c.recLvl  + 1
-        ,c.pth + ' -> ' + CAST(e.EmpId AS VARCHAR(10))
+        ,pth = c.pth + ' -> ' + CAST(e.EmpId AS VARCHAR(10))
         ,isCircRef = CASE --check if there is any EmpId who is already included in the result
                         WHEN c.pth  LIKE '%' + CAST(e.EmpId AS VARCHAR(10)) + '%'  THEN 1
                         ELSE 0
