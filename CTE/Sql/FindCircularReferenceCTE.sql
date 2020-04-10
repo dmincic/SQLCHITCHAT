@@ -33,4 +33,4 @@ DECLARE @EmpId INT = 3;
           ,isCircRef
 	FROM cte1
 	WHERE cte1.isCircRef = 1 --returns only circular ref. hierarchies
-		AND cte1.recLvl <= 2; --limits final resut to two recursions
+		AND cte1.recLvl <= 2; --limits final result to two recursions
