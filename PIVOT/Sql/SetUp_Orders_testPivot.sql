@@ -7,6 +7,7 @@ CREATE TABLE dbo.Orders_testPivot(
             PRIMARY KEY CLUSTERED,
         Custid      INT       NULL,
         Orderdate   DATETIME  NOT NULL,
+        OrderYear   AS YEAR(Orderdate) PERSISTED,  
         Shipperid   INT       NOT NULL,
         Freight     MONEY     NOT NULL,
         Shipname    NVARCHAR(40) NOT NULL,
