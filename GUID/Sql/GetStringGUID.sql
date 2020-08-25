@@ -24,6 +24,7 @@ BEGIN
            ,udi_nchar)
         SELECT [uid]     = @guid
               ,uid_bin16 = CONVERT(VARBINARY(16),@guid) --Implicit conversion from data type nvarchar to binary is not allowed
+            --,uid_bin16 = CONVERT(UNIQUEIDENTIFIER,@guid)
               ,uid_char  = @guid
               ,udi_nchar = @guid
 
