@@ -20,6 +20,6 @@ params = ui
 #execute stored proc 
 cursor.execute(sql,params) ##RPC call - parameterised batch request
 
-##print(ui)
+print(ui)
 cnxn.close()
 
