@@ -1,0 +1,29 @@
+DROP TABLE IF EXISTS #t1,#t2;
+GO
+CREATE TABLE #t1(seqGuid UNIQUEIDENTIFIER 
+                    DEFAULT NEWSEQUENTIALID());
+GO
+CREATE TABLE #t2(seqGuid UNIQUEIDENTIFIER 
+                    DEFAULT NEWSEQUENTIALID());
+GO
+
+INSERT INTO #t1 DEFAULT VALUES
+GO 2
+INSERT INTO #t2 DEFAULT VALUES
+GO 3
+INSERT INTO #t1 DEFAULT VALUES
+GO 2
+
+;WITH x AS 
+(
+    SELECT *
+           ,tab = 1
+    FROM   #t1
+    UNION
+    SELECT *
+          ,tab = 2
+    FROM   #t2
+)
+SELECT *
+FROM x
+ORDER BY x.seqGuid
