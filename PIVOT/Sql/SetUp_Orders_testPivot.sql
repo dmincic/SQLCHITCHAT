@@ -25,8 +25,8 @@ SET IDENTITY_INSERT dbo.Orders_testPivot ON
         ,Custid
         ,Orderdate 
         ,Shipperid
-        ,OrderValue
         ,Freight
+        ,OrderValue
         ,Shipname
         ,Shipaddress
         ,Shipcity
