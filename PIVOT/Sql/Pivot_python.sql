@@ -25,9 +25,7 @@ dfpivot_out = df.pivot_table(index = ["Shipcountry"], \
 
 ## dfpivot_out =dfpivot_out.reset_index(level="Shipcountry") ##we can reshape the data frame in a separate statement.
 print(dfpivot_out)
-
-##dfpivot_out = dfpivot' 
-
+' 
         ,@input_data_1 =N'SELECT   Orderid
                                   ,Custid
                                   ,Orderdate
