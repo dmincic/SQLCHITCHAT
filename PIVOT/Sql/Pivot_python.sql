@@ -20,8 +20,7 @@ EXEC sys.sp_execute_external_script
 dfpivot_out = df.pivot_table(index = ["Shipcountry"], \
                               columns =["OrderYear"], \
                               values = ["Freight"], \
-                              aggfunc={"Freight":sum}, \
-                              fill_value=None).reset_index(level="Shipcountry")
+                              aggfunc={"Freight":sum}).reset_index(level="Shipcountry")
 
 ## dfpivot_out =dfpivot_out.reset_index(level="Shipcountry") ##we can reshape the data frame in a separate statement.
 print(dfpivot_out)
