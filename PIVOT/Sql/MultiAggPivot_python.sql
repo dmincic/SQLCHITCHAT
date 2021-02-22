@@ -40,7 +40,7 @@ print(dfpivot_out)
                         FROM dbo.Orders_testPivot;'
         ,@input_data_1_name =N'df' -- the default value is InputDataSet
         ,@output_data_1_name =N'dfpivot_out'
-   WITH RESULT SETS  ((Shipcountry  varchar(2000),[2018] FLOAT, [2019] FLOAT,[2020] FLOAT
+   WITH RESULT SETS  ((Shipcountry NVARCHAR(15),[2018] FLOAT, [2019] FLOAT,[2020] FLOAT
                                               ,[Avg Order Value(2018)] FLOAT
                                               ,[Avg Order Value(2019)] FLOAT
                                               ,[Avg Order Value(2020)] FLOAT))
