@@ -1,3 +1,5 @@
+USE testCollation
+GO
 
 
 SELECT [CodePage] = COLLATIONPROPERTY([name],'CodePage') 
