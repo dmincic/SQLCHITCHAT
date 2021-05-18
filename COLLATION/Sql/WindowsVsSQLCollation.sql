@@ -15,7 +15,7 @@ GO
 
 ALTER DATABASE testCollation
     COLLATE SQL_Latin1_General_CP1_CI_AS;
-    --    COLLATE Latin1_General_CI_AI; --windows collation
+  --COLLATE Latin1_General_100_CI_AS_SC; --windows collation
 ;
 GO
 
