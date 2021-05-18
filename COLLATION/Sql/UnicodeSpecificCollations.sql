@@ -38,9 +38,11 @@ However, we can apply the collation on a Unicode string(N'Hello World). The Unic
 string will be internally converted to a non-Unicode string and stored in(or mapped to) the @myNonUnicodeString
 local variable. The database default collation (Latin1_General_100_CS_AS) is automatically assigned to all local variables
 of the string type, in this case  @myNonUnicodeString.
-It is interesting to see that even if we were able to assign a Unicode specific collation to a Unicode string, and then to assign the string value
-to a local variable that was set up to host a non-Unicode values, internally, the string value was converted to a non-Unicode with the 
-database default collation.
+It is interesting to see that even if we were able to assign a Unicode specific collation (COLLATE Assamese_100_CI_AS_SC) 
+to a Unicode string (N'Hello World'), and then to assign the string value to a local variable that was set up to host non-Unicode values, 
+internally,the string value was converted to a non-Unicode encoded value with the database default collation. 
+Finally, the @myNonUnicodeString value stores 'Hello World' with the db default collation "Latin1_General_100_CS_AS".
+
 
 The non-Unicode string value will be automatically Collated by the database default collation, in this case Latin1_General_100_CS_AS
 */
