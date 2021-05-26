@@ -7,7 +7,7 @@ lname = "Goldberg"
 ##{SQL Server};'
 ##ODBC Driver 17 for SQL Server
 conn = pyodbc.connect('Driver={ODBC Driver 17 for SQL Server};'  
-                      'Server=tcp:ENETT-NB290\\SQL2019;'
+                      'Server=tcp:<serverName>\\<instanceName>;' 
                       'Database=testCollation;'
                       'Trusted_Connection=yes;'
 		              'Poolig = false;'
